@@ -1,0 +1,31 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>{{ isSignupMode ? 'Create Account' : 'Welcome Back'}}</h1>
+      <p>{{ isSignupMode ? 'Sign up to get started' : 'Sign in to continue'}}</p>
+    </div>
+
+    @if(errorMessage){
+      <div class="error-message">
+        <mat-icon>error</mat-icon>
+        <span class="error-text">{{errorMessage}}</span>
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
+
+      <button type="submit" mat-raised-button color="primary" class="submit-btn">
+        {{ isSignupMode ? 'Sign Up' : 'Log In'}}
+      </button>
+    </form>
+
+    <div class="divider">
+      <span>or</span>
+    </div>
+
+    <button mat-button class="switch-btn" (click)="toggleMode()">
+      {{ isSignupMode ? 'Already have an account?' : 'Create new account' }}
+    </button>
+  </div>
+</div>

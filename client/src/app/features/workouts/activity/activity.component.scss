@@ -1,0 +1,132 @@
+@use '../../../../styles/mixins' as *;
+
+.activity-card {
+  background: #f9fafb;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.5rem;
+  transition: all 0.2s ease;
+  cursor: grab;
+
+  &:hover {
+    border-color: #2c5f6f;
+    box-shadow: 0 2px 8px rgba(44, 95, 111, 0.15);
+    transform: translateY(-2px);
+  }
+
+  &.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+  }
+
+  &.cdk-drag-placeholder {
+    opacity: 0.4;
+    background: #e2e8f0;
+  }
+}
+
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.muscle-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.muscle-tag {
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+// Edit and delete appear on hover.
+.activity-actions {
+  display: flex;
+  gap: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+
+  .activity-card:hover & {
+    opacity: 1;
+  }
+}
+
+.action-btn {
+  @include flex-center;
+  background: white;
+  border: 1px solid #e2e8f0;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+
+  mat-icon {
+    @include icon-size(1rem);
+  }
+
+  &.edit {
+    mat-icon { color: #2c5f6f; }
+    &:hover { background: #e6f7ff; border-color: #2c5f6f; }
+  }
+
+  &.delete {
+    mat-icon { color: #f56565; }
+    &:hover { background: #fff5f5; border-color: #f56565; }
+  }
+}
+
+.activity-body {
+  margin-bottom: 0.75rem;
+}
+
+.activity-description {
+  font-size: 0.85rem;
+  color: #4a5568;
+  line-height: 1.5;
+  margin: 0;
+  white-space: pre-line;
+  max-height: 100px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 2px;
+  }
+}
+
+.activity-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.duration-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  background: white;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  color: #718096;
+  font-weight: 500;
+
+  mat-icon {
+    @include icon-size(0.9rem);
+  }
+}

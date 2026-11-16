@@ -1,0 +1,76 @@
+<div class="workouts-wrapper" cdkDropListGroup>
+  <div class="workouts-layout">
+    <app-sidebar *ngIf="isCurrentUser" />
+
+    <div class="workouts-main">
+      <div class="workouts-header">
+        <div class="header-left">
+          <h1 class="page-title">
+            <mat-icon>fitness_center</mat-icon>
+            {{ isCurrentUser ? 'My Workouts' : username() + "'s Workouts" }}
+          </h1>
+        </div>
+
+        <div class="header-center">
+          <button class="nav-btn" (click)="previousWeek()">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          <app-date-range-picker [(selectedWeek)]="currentWeek" (selectedWeekChange)="onSelectedWeekChange($event)"></app-date-range-picker>
+          <button class="nav-btn" (click)="nextWeek()">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="private-activity" *ngIf="activityHidden">
+        <mat-icon>lock</mat-icon>
+        <span>Only {{ username() }}'s friends can see their workouts.</span>
+      </div>
+
+<!--       Calendar Grid-->
+      <div class="calendar-grid" *ngIf="!activityHidden">
+        <div class="calendar-row">
+          <ng-container *ngFor="let day of days.slice(0, 4)">
+            <app-calendar-content
+              [workouts]="day.workouts"
+              [date]="day.date"
+              [foods]="day.loggedFoods"
+              [editable]="isCurrentUser"
+            />
+          </ng-container>
+        </div>
+
+        <!-- Second row: 3 days -->
+        <div class="calendar-row">
+          <ng-container *ngFor="let day of days.slice(4, 7)">
+            <app-calendar-content
+              [workouts]="day.workouts"
+              [date]="day.date"
+              [foods]="day.loggedFoods"
+              [editable]="isCurrentUser"
+            />
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button *ngIf="isCurrentUser"
+            mat-fab
+            class="fab"
+            [matMenuTriggerFor]="menu">
+      <mat-icon>add</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu" class="fab-menu">
+      <button mat-menu-item (click)="openAddDialog()">
+        <mat-icon>fitness_center</mat-icon>
+        <span>Log Workout</span>
+      </button>
+      <button mat-menu-item (click)="openFoodDialog()">
+        <mat-icon>restaurant</mat-icon>
+        <span>Log Meal</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>

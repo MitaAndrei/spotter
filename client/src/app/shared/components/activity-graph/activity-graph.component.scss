@@ -1,0 +1,24 @@
+.graph {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  justify-content: center;
+}
+
+.week {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.day {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}

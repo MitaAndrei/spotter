@@ -1,0 +1,261 @@
+@use '../../../styles/mixins' as *;
+
+.search-page {
+  padding: 2rem;
+  min-height: 100%;
+  background: linear-gradient(to bottom, #f8fafc, #e2e8f0);
+}
+
+.search-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.search-header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0 0 0.5rem 0;
+  }
+
+  p {
+    color: #718096;
+    font-size: 1.125rem;
+    margin: 0;
+  }
+}
+
+.search-bar-wrapper {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.search-input-container {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+  &:focus-within {
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+    transform: translateY(-2px);
+  }
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  color: #a0aec0;
+  @include icon-size(1.5rem);
+}
+
+.search-input {
+  flex: 1;
+  padding: 1rem 1rem 1rem 3.5rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  outline: none;
+  color: #2d3748;
+
+  &::placeholder {
+    color: #a0aec0;
+  }
+}
+
+.clear-btn {
+  position: absolute;
+  right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a0aec0;
+  transition: color 0.2s ease;
+
+  mat-icon {
+    @include icon-size(1.25rem);
+  }
+
+  &:hover {
+    color: #718096;
+  }
+}
+
+.search-btn {
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+
+  &:hover {
+    background: linear-gradient(135deg, #5568d3 0%, #6a3f92 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.results-section {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.results-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.results-count {
+  color: #718096;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.user-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+
+  &:hover {
+    background: #edf2f7;
+    transform: translateX(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    .arrow-icon {
+      transform: translateX(4px);
+    }
+  }
+}
+
+.user-avatar {
+  flex-shrink: 0;
+
+  img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.username {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0;
+}
+
+.view-profile {
+  font-size: 0.875rem;
+  color: #667eea;
+  font-weight: 500;
+}
+
+.arrow-icon {
+  color: #a0aec0;
+  transition: transform 0.3s ease;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  .empty-icon {
+    @include icon-size(5rem);
+    color: #cbd5e0;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #4a5568;
+    margin: 0;
+  }
+
+  p {
+    color: #a0aec0;
+    font-size: 1rem;
+    margin: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-page {
+    padding: 1rem;
+  }
+
+  .search-header h1 {
+    font-size: 2rem;
+  }
+
+  .search-bar-wrapper {
+    flex-direction: column;
+  }
+
+  .search-btn {
+    width: 100%;
+  }
+
+  .user-card {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .user-avatar img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .username {
+    font-size: 1.1rem;
+  }
+}

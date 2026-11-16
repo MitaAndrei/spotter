@@ -1,0 +1,5 @@
+# Gets an HTTPS certificate for DOMAIN from Let's Encrypt and forwards everything to nginx in the client container.
+{$DOMAIN} {
+	encode zstd gzip
+	reverse_proxy client:8080
+}

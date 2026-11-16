@@ -1,0 +1,69 @@
+<div class="chat-window">
+  <!-- Header -->
+  <header class="window-header">
+    <div class="contact-info">
+      <div class="contact-avatar">
+        <img class="profile-pic" [src]="friend.profileImageUrl || 'assets/default-avatar.svg'" alt="{{friend.username}}" />
+      </div>
+      <div class="contact-details">
+        <h3 [routerLink]="['/profile',friend.username]" class="contact-name">
+          {{friend.username}}
+        </h3>
+      </div>
+    </div>
+  </header>
+
+  <!-- Messages -->
+  <div #scrollContainer class="messages-container" (scroll)="onScroll($event)">
+    @if(loading() && hasMore()) {
+      <div class="loading-wrapper">
+        <div class="spinner-border spinner-border-sm" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <span class="loading-label">Loading messages...</span>
+      </div>
+    }
+
+    @for(group of chatMessages() | groupMessagesByDate; track group.date) {
+      <div class="date-separator">
+        <div class="separator-line"></div>
+        <span class="separator-label">
+          {{ group.date | date:'mediumDate' }}
+        </span>
+        <div class="separator-line"></div>
+      </div>
+
+      @for(message of group.messages; track message.id) {
+        <div class="message-row"
+             [class.outgoing]="message.senderId === currentUser.id"
+             [class.incoming]="message.senderId !== currentUser.id">
+
+          <div class="message-container">
+            <div class="message-bubble">
+              <p class="message-content">{{message.content}}</p>
+            </div>
+            <span class="message-timestamp">{{ message.timestamp | date:'shortTime' }}</span>
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <!-- Input -->
+  <footer class="message-composer">
+
+    <div class="input-container">
+      <input
+        [(ngModel)]="message"
+        type="text"
+        class="message-field"
+        placeholder="Write a message..."
+        (keyup.enter)="send()"
+      />
+    </div>
+
+    <button class="send-button" (click)="send()" [disabled]="!message.trim()">
+      <mat-icon>send</mat-icon>
+    </button>
+  </footer>
+</div>

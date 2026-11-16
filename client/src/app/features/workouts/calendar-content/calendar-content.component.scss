@@ -1,0 +1,130 @@
+@use '../../../../styles/mixins' as *;
+
+@mixin thin-scrollbar {
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 2px;
+  }
+}
+
+.day-card {
+  @include card(12px);
+  @include thin-scrollbar;
+  min-height: 200px;
+  max-height: 500px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  &.today {
+    border-color: #2c5f6f;
+    box-shadow: 0 4px 16px rgba(44, 95, 111, 0.2);
+  }
+
+  &.has-content {
+    border-left: 4px solid #48bb78;
+  }
+
+  &.cdk-drop-list-dragging {
+    background: #f0fdf4;
+    border-color: #48bb78;
+    border-style: dashed;
+  }
+}
+
+.day-header {
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.day-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.day-name {
+  font-size: 0.75rem;
+  color: #718096;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.day-number {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.day-badge span {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.day-content {
+  @include thin-scrollbar;
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-y: auto;
+  max-height: 600px;
+}
+
+.empty-state {
+  @include flex-center;
+  flex-direction: column;
+  padding: 2rem 1rem;
+  color: #a0aec0;
+  text-align: center;
+  flex: 1;
+
+  mat-icon {
+    @include icon-size(3rem);
+    margin-bottom: 0.5rem;
+    color: #e2e8f0;
+  }
+
+  span {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+}
+
+.workout-item {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,57 @@
+# The whole app: `docker compose up --build`, then open http://localhost:8080
+# The defaults below are for trying it on your own machine, which is why the app is only
+# published on 127.0.0.1. See .env.example before running it anywhere else.
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: gymapp
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_DB: gymapp
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      # Over TCP, because the temporary server Postgres runs during its first start only listens on a socket.
+      test: ["CMD", "pg_isready", "--host=127.0.0.1", "--username=gymapp", "--dbname=gymapp"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ./api/gymappAPI
+    environment:
+      ConnectionStrings__AppDbConnectionString: Host=postgres;Database=gymapp;Username=gymapp;Password=${POSTGRES_PASSWORD:-changeme}
+      ConnectionStrings__Redis: redis:6379,abortConnect=false
+      JwtSettings__Key: ${JWT_KEY:-local-only-signing-key-set-JWT_KEY-before-running-this-anywhere-else}
+      Database__MigrateOnStartup: "true"
+      # Takes the client address from nginx, so the login rate limit works per client.
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+      # Creates a "demo" account with sample data on first start, when set.
+      Demo__Password: ${DEMO_PASSWORD:-}
+      AWS__Region: ${AWS_REGION:-eu-central-1}
+      AWS__BucketName: ${AWS_BUCKET_NAME:-}
+      AWS__AccessKey: ${AWS_ACCESS_KEY:-}
+      AWS__SecretKey: ${AWS_SECRET_KEY:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  client:
+    build: ./client
+    ports:
+      - "127.0.0.1:${APP_PORT:-8080}:8080"
+    depends_on:
+      - api
+
+volumes:
+  postgres-data:

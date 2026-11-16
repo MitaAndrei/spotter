@@ -1,0 +1,20 @@
+<div class="wrapper">
+  <div class="input-box">
+
+
+    <mat-date-range-input [rangePicker]="picker" #rangeInput class="dp-input"
+                         >
+      <input matStartDate [value]="selectedWeek().start" (dateChange)="onChange($event)"  readonly>
+      <input matEndDate [value]="selectedWeek().end" readonly>
+    </mat-date-range-input>
+
+
+    <div class="display-date">
+      <span>{{getDatesString()}}</span>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    </div>
+
+
+    <mat-date-range-picker  #picker disabled="false"></mat-date-range-picker>
+  </div>
+</div>

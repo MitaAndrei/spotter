@@ -1,0 +1,31 @@
+<div class="templates-sidebar-container">
+  <div class="sidebar-header">
+    <h3>Templates</h3>
+    <button class="new-template-btn" (click)="openNewTemplateDialog()">
+      <mat-icon>add</mat-icon>
+      <span>New</span>
+    </button>
+  </div>
+
+  <div class="templates-list"
+       id="templateList"
+       cdkDropList
+       (cdkDropListDropped)="drop($event)"
+  >
+
+
+    <ng-container *ngIf="templates.length === 0; else hasTemplates">
+      <div class="empty-templates">
+        <mat-icon>bookmark_border</mat-icon>
+        <p>No templates yet</p>
+        <span>Create a template to reuse workouts</span>
+      </div>
+    </ng-container>
+
+    <ng-template #hasTemplates>
+      <ng-container *ngFor="let template of templates;">
+        <app-activity [workout]="template"></app-activity>
+      </ng-container>
+    </ng-template>
+  </div>
+</div>

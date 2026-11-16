@@ -1,0 +1,406 @@
+@use '../../../styles/mixins' as *;
+
+$card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+$purple: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$blue: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+
+// Cards that lift on hover.
+@mixin hover-card($lift: 4px, $shadow: 0 8px 16px rgba(0, 0, 0, 0.15)) {
+  @include card($shadow: $card-shadow);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-$lift);
+    box-shadow: $shadow;
+  }
+}
+
+// A colored square holding a white icon.
+@mixin icon-tile($size, $icon-size) {
+  @include flex-center;
+  width: $size;
+  height: $size;
+  border-radius: 12px;
+  flex-shrink: 0;
+
+  mat-icon {
+    @include icon-size($icon-size);
+    color: white;
+  }
+}
+
+.home-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+// Landing page (logged out)
+.landing-section {
+  @include flex-center;
+  height: 100%;
+  background: linear-gradient(to bottom, #f8fafc, #e2e8f0);
+  padding: 2rem;
+}
+
+.landing-content {
+  max-width: 600px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+}
+
+.description {
+  font-size: 1.125rem;
+  color: #64748b;
+  margin: 0 0 2rem 0;
+  line-height: 1.6;
+}
+
+button {
+  font-size: 1.125rem;
+  padding: 0.75rem 2rem;
+  margin-bottom: 3rem;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+// Used both on the landing page and in the dashboard cards.
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #4a5568;
+  font-size: 1rem;
+
+  mat-icon {
+    @include icon-size(1.25rem);
+    color: #48bb78;
+  }
+
+  span {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  .description {
+    font-size: 1rem;
+  }
+}
+
+// Dashboard (logged in)
+.dashboard {
+  padding: 2rem 0;
+}
+
+.dashboard-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.welcome-header {
+  @include card($shadow: $card-shadow);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.welcome-text {
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0 0 0.5rem 0;
+  }
+
+  p {
+    color: #718096;
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  .username {
+    background: $purple;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+.date-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #718096;
+  font-weight: 500;
+
+  mat-icon {
+    color: #2c5f6f;
+  }
+}
+
+.quick-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-box {
+  @include hover-card;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.stat-icon {
+  @include icon-tile(60px, 2rem);
+
+  &.workout { background: $purple; }
+  &.streak { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+  &.nutrition { background: $blue; }
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2d3748;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #718096;
+}
+
+// Workouts and diet cards
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.action-card {
+  @include hover-card(6px, 0 12px 24px rgba(0, 0, 0, 0.15));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  padding: 2rem 2rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0;
+  }
+}
+
+.card-icon {
+  @include icon-tile(50px, 1.75rem);
+
+  .workout-card & { background: $purple; }
+  .diet-card & { background: $blue; }
+}
+
+.card-body {
+  padding: 0 2rem 2rem;
+  flex: 1;
+
+  p {
+    color: #718096;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.card-features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.card-footer {
+  padding: 0 2rem 2rem;
+
+  .btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+}
+
+.btn-workout {
+  background: $purple;
+  color: white;
+
+  &:hover { background: linear-gradient(135deg, #5568d3 0%, #6a3f92 100%); }
+}
+
+.btn-diet {
+  background: $blue;
+  color: white;
+
+  &:hover { background: linear-gradient(135deg, #3d9ce5 0%, #00d9e5 100%); }
+}
+
+.secondary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.secondary-card {
+  @include hover-card;
+  padding: 2rem;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.secondary-icon {
+  @include icon-tile(50px, 1.75rem);
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.secondary-content {
+  flex: 1;
+
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0 0 0.5rem 0;
+  }
+
+  p {
+    color: #718096;
+    margin: 0 0 1rem 0;
+    font-size: 0.9rem;
+  }
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #2c5f6f;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  mat-icon {
+    @include icon-size(1rem);
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    gap: 0.5rem;
+
+    mat-icon {
+      transform: translateX(4px);
+    }
+  }
+}
+
+.motivation-card {
+  background: $purple;
+  padding: 3rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  // Faint dot pattern
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100%" height="100%" fill="url(%23dots)"/></svg>');
+  }
+}
+
+.quote-icon {
+  margin-bottom: 1rem;
+  position: relative;
+
+  mat-icon {
+    @include icon-size(3rem);
+    color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+.quote {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+  font-style: italic;
+  line-height: 1.6;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 0 1rem;
+  }
+
+  .welcome-header {
+    padding: 1.5rem;
+  }
+
+  .welcome-text h1 {
+    font-size: 1.5rem;
+  }
+
+  .quick-stats,
+  .secondary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .motivation-card {
+    padding: 2rem;
+  }
+
+  .quote {
+    font-size: 1.25rem;
+  }
+}

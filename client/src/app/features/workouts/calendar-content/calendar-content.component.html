@@ -1,0 +1,42 @@
+<div class="day-card"
+     [class.today]="dayIsToday()"
+     [class.has-content]="workouts().length > 0 || foods().length > 0"
+     cdkDropList
+     [cdkDropListData]="workouts()"
+     [cdkDropListDisabled]="!editable()"
+     (cdkDropListDropped)="drop($event)">
+
+  <!-- Day Header -->
+  <div class="day-header">
+    <div class="day-info">
+      <span class="day-name">{{ getDayName(date()) }}</span>
+      <span class="day-number">{{ date().getDate() }}</span>
+    </div>
+    <div class="day-badge" *ngIf="dayIsToday()">
+      <span>Today</span>
+    </div>
+  </div>
+
+  <!-- Workouts List -->
+  <div class="day-content">
+    <div *ngIf="workouts().length === 0 && foods().length === 0" class="empty-state">
+      @if (editable()) {
+        <mat-icon>add_circle_outline</mat-icon>
+        <span>Add workout or drag template</span>
+      } @else {
+        <span>Nothing logged</span>
+      }
+    </div>
+
+    <div *ngFor="let workout of workouts()" class="workout-item">
+      <app-activity [workout]="workout" [editable]="editable()" />
+    </div>
+
+    <!-- Food Card -->
+    <app-food-card
+      [foods]="foods()"
+      [date]="date()"
+      [editable]="editable()"
+    />
+  </div>
+</div>

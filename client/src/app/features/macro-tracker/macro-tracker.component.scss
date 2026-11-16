@@ -1,0 +1,404 @@
+@use '../../../styles/mixins' as *;
+
+.food-diary-wrapper {
+  min-height: calc(100vh - 80px);
+  background: #f5f7fa;
+  padding: 2rem 0;
+}
+
+.food-diary-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.food-diary-header {
+  @include card;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.header-left {
+  flex: 1;
+  min-width: 200px;
+}
+
+.page-title {
+  @include page-title;
+}
+
+.header-center {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  justify-content: center;
+  min-width: 300px;
+}
+
+.nav-btn {
+  @include nav-button;
+}
+
+// Nutrition summary
+.nutrition-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.nutrition-card {
+  @include card;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.nutrition-icon {
+  @include flex-center;
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  flex-shrink: 0;
+
+  mat-icon {
+    @include icon-size(1.75rem);
+    color: white;
+  }
+
+  &.calories { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+  &.protein { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+  &.carbs { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+  &.fats { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+}
+
+.nutrition-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.nutrition-label {
+  font-size: 0.85rem;
+  color: #718096;
+  font-weight: 500;
+}
+
+.nutrition-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.nutrition-unit {
+  font-size: 0.8rem;
+  color: #a0aec0;
+}
+
+// Foods
+.foods-card {
+  @include card;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.foods-header {
+  padding: 2rem;
+  border-bottom: 2px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.foods-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0;
+}
+
+.log-food-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  mat-icon {
+    @include icon-size(1.25rem);
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.foods-content {
+  padding: 2rem;
+  flex: 1;
+}
+
+.empty-state {
+  @include flex-center;
+  flex-direction: column;
+  padding: 3rem 1rem;
+  text-align: center;
+  color: #a0aec0;
+
+  mat-icon {
+    @include icon-size(4rem);
+    color: #e2e8f0;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-weight: 600;
+    color: #718096;
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+  }
+
+  span {
+    font-size: 0.9rem;
+  }
+}
+
+.foods-table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+
+.foods-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead {
+    background: #f7fafc;
+    border-bottom: 2px solid #e2e8f0;
+  }
+
+  th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: #4a5568;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid #e2e8f0;
+    transition: background-color 0.2s ease;
+
+    &:hover { background: #f9fafb; }
+    &.editing { background: #f0fdf4; }
+  }
+
+  td {
+    padding: 1rem;
+    color: #2d3748;
+  }
+}
+
+.food-name {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.food-grams .editable {
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #e2e8f0;
+    color: #2c5f6f;
+  }
+}
+
+.gram-input {
+  width: 80px;
+  padding: 0.5rem;
+  border: 2px solid #2c5f6f;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #2d3748;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(44, 95, 111, 0.1);
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+// Row buttons: a color for the icon and border, and a light tint on hover.
+@mixin action-color($color, $hover-bg, $hover-border: $color) {
+  color: $color;
+
+  &:hover {
+    background: $hover-bg;
+    border-color: $hover-border;
+  }
+}
+
+.action-btn {
+  @include flex-center;
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+
+  mat-icon {
+    @include icon-size(1.1rem);
+  }
+
+  &.edit { @include action-color(#2c5f6f, #e6f7ff); }
+  &.delete { @include action-color(#f56565, #fff5f5); }
+  &.save { @include action-color(#48bb78, #f0fdf4); }
+  &.cancel { @include action-color(#718096, #f7fafc, #cbd5e0); }
+}
+
+// Responsive
+@media (max-width: 1024px) {
+  .food-diary-container {
+    padding: 0 1rem;
+  }
+
+  .food-diary-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-left,
+  .header-center {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nutrition-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .foods-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .log-food-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .food-diary-wrapper {
+    padding: 1rem 0;
+  }
+
+  .food-diary-container {
+    padding: 0 0.5rem;
+    gap: 1rem;
+  }
+
+  .food-diary-header {
+    padding: 1rem;
+  }
+
+  .page-title {
+    font-size: 1.25rem;
+
+    mat-icon {
+      @include icon-size(1.5rem);
+    }
+  }
+
+  .header-center {
+    min-width: auto;
+    gap: 0.5rem;
+  }
+
+  .nutrition-summary {
+    gap: 1rem;
+  }
+
+  .nutrition-card {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .nutrition-icon {
+    width: 50px;
+    height: 50px;
+
+    mat-icon {
+      @include icon-size(1.5rem);
+    }
+  }
+
+  .nutrition-value {
+    font-size: 1.5rem;
+  }
+
+  .foods-header,
+  .foods-content {
+    padding: 1rem;
+  }
+
+  .foods-table {
+    font-size: 0.85rem;
+
+    th,
+    td {
+      padding: 0.75rem;
+    }
+  }
+
+  .action-btn {
+    width: 32px;
+    height: 32px;
+
+    mat-icon {
+      @include icon-size(1rem);
+    }
+  }
+}
