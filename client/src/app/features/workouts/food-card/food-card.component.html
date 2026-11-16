@@ -1,0 +1,36 @@
+<div class="card shadow-sm border-1 text-center">
+  <div class="card-body">
+
+    @if (foods().length > 0){
+
+    <div class="row text-center">
+      <div class="col">
+        <p class="text-muted small my-1">Calories</p>
+        <p class="fw-bold text-dark m-0">{{totalCalories.toFixed(2)}}</p>
+      </div>
+      <div class="col">
+        <p class="text-muted small my-1">Protein</p>
+        <p class="fw-bold text-info m-0">{{totalProtein.toFixed(2)}}g</p>
+      </div>
+      <div class="col">
+        <p class="text-muted small my-1">Fats</p>
+        <p class="fw-bold text-danger m-0">{{totalFats.toFixed(2)}}g</p>
+      </div>
+      <div class="col">
+        <p class="text-muted small my-1">Carbs</p>
+        <p class="fw-bold text-success m-0">{{totalCarbs.toFixed(2)}}g</p>
+      </div>
+    </div>
+
+    @if (editable()) {
+    <p class="my-1 text-decoration-underline" role="button" [routerLink]="['../../macro',]" [queryParams]="{date: getFormattedDate(date())}">See full log</p>
+    }
+    }
+    @else {
+      <p class="mb-2"><strong>No food logged on this day.</strong></p>
+      @if (editable()) {
+        <u role="button" tabindex="0" (click)="openLogFoodDialog()" (keydown.enter)="openLogFoodDialog()">Log food</u>
+      }
+    }
+  </div>
+</div>

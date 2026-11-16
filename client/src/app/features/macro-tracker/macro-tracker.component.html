@@ -1,0 +1,162 @@
+<div class="food-diary-wrapper">
+  <div class="food-diary-container">
+
+    <div class="food-diary-header">
+      <div class="header-left">
+        <h1 class="page-title">
+          <mat-icon>restaurant</mat-icon>
+          Food Diary
+        </h1>
+      </div>
+
+      <div class="header-center">
+        <button class="nav-btn" (click)="changeDay(-1)">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <app-verbose-datepicker [(date)]="date"></app-verbose-datepicker>
+
+        <button class="nav-btn" (click)="changeDay(1)">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="nutrition-summary">
+      <div class="nutrition-card">
+        <div class="nutrition-icon calories">
+          <mat-icon>local_fire_department</mat-icon>
+        </div>
+        <div class="nutrition-info">
+          <span class="nutrition-label">Calories</span>
+          <span class="nutrition-value">{{ getTotalCalories() | number: '1.0-0' }}</span>
+          <span class="nutrition-unit">kcal</span>
+        </div>
+      </div>
+
+      <div class="nutrition-card">
+        <div class="nutrition-icon protein">
+          <mat-icon>fitness_center</mat-icon>
+        </div>
+        <div class="nutrition-info">
+          <span class="nutrition-label">Protein</span>
+          <span class="nutrition-value">{{ getTotalProtein() | number: '1.0-1' }}</span>
+          <span class="nutrition-unit">g</span>
+        </div>
+      </div>
+
+      <div class="nutrition-card">
+        <div class="nutrition-icon carbs">
+          <mat-icon>grain</mat-icon>
+        </div>
+        <div class="nutrition-info">
+          <span class="nutrition-label">Carbs</span>
+          <span class="nutrition-value">{{ getTotalCarbs() | number: '1.0-1' }}</span>
+          <span class="nutrition-unit">g</span>
+        </div>
+      </div>
+
+      <div class="nutrition-card">
+        <div class="nutrition-icon fats">
+          <mat-icon>opacity</mat-icon>
+        </div>
+        <div class="nutrition-info">
+          <span class="nutrition-label">Fats</span>
+          <span class="nutrition-value">{{ getTotalFats() | number: '1.0-1' }}</span>
+          <span class="nutrition-unit">g</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Foods Table -->
+    <div class="foods-card">
+      <div class="foods-header">
+        <h2 class="foods-title">Foods Logged</h2>
+        <button class="log-food-btn" (click)="openLogFoodDialog()">
+          <mat-icon>add_circle</mat-icon>
+          <span>Log Food</span>
+        </button>
+      </div>
+
+      <div class="foods-content">
+        <ng-container *ngIf="foodsForCurrentDate.length === 0">
+          <div class="empty-state">
+            <mat-icon>no_meals</mat-icon>
+            <p>No foods logged yet</p>
+            <span>Start tracking your nutrition today</span>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="foodsForCurrentDate.length > 0">
+          <div class="foods-table-wrapper">
+            <table class="foods-table">
+              <thead>
+              <tr>
+                <th>Food</th>
+                <th>Grams</th>
+                <th>Calories</th>
+                <th>Protein</th>
+                <th>Carbs</th>
+                <th>Fats</th>
+                <th>Actions</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let loggedFood of foodsForCurrentDate; let i = index"
+                  class="food-row"
+                  [class.editing]="beingEdited === loggedFood">
+
+                <td class="food-name">
+                  <span>{{ loggedFood.food.name }}</span>
+                </td>
+
+                <td class="food-grams">
+                  <ng-container *ngIf="beingEdited !== loggedFood">
+                      <span (dblclick)="edit(loggedFood)" class="editable">
+                        {{ loggedFood.grams }}
+                      </span>
+                  </ng-container>
+                  <ng-container *ngIf="beingEdited === loggedFood">
+                    <input
+                      [(ngModel)]="loggedFood.grams"
+                      (keyup.enter)="save(loggedFood)"
+                      (keyup.escape)="cancel()"
+                      type="number"
+                      min="1"
+                      class="gram-input"
+                    />
+                  </ng-container>
+                </td>
+
+                <td>{{ (loggedFood.food.calories / 100 * loggedFood.grams) | number: '1.0-0' }}</td>
+                <td>{{ (loggedFood.food.protein / 100 * loggedFood.grams) | number: '1.0-1' }}</td>
+                <td>{{ (loggedFood.food.carbs / 100 * loggedFood.grams) | number: '1.0-1' }}</td>
+                <td>{{ (loggedFood.food.fats / 100 * loggedFood.grams) | number: '1.0-1' }}</td>
+
+                <td class="actions">
+                  <ng-container *ngIf="beingEdited !== loggedFood">
+                    <button class="action-btn edit" (click)="edit(loggedFood)" title="Edit">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button class="action-btn delete" (click)="deleteLoggedFood(loggedFood.id)" title="Delete">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </ng-container>
+                  <ng-container *ngIf="beingEdited === loggedFood">
+                    <button class="action-btn save" (click)="save(loggedFood)" title="Save">
+                      <mat-icon>check</mat-icon>
+                    </button>
+                    <button class="action-btn cancel" (click)="cancel()" title="Cancel">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </ng-container>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,191 @@
+<div class="home-wrapper">
+  <div *ngIf="!authService.currentUserSig()" class="landing-section">
+    <div class="landing-content">
+      <h1>Transform your fitness journey</h1>
+
+      <p class="description">
+        Track workouts, monitor nutrition, and achieve your fitness goals
+        with this comprehensive tracking platform.
+      </p>
+
+      <button routerLink="/auth-form">
+        Get Started
+      </button>
+
+      <div class="features">
+        <div class="feature">
+          <mat-icon>fitness_center</mat-icon>
+          <span>Track unlimited workouts</span>
+        </div>
+        <div class="feature">
+          <mat-icon>restaurant</mat-icon>
+          <span>Monitor your nutrition</span>
+        </div>
+        <div class="feature">
+          <mat-icon>people</mat-icon>
+          <span>Connect with friends</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Dashboard for Authenticated Users -->
+  <div *ngIf="authService.currentUserSig()" class="dashboard">
+    <div class="dashboard-container">
+      <!-- Welcome Header -->
+      <div class="welcome-header">
+        <div class="welcome-text">
+          <h1>Welcome back, <span class="username">{{ authService.currentUserSig()?.username }}</span>!</h1>
+          <p>Ready to crush your fitness goals today?</p>
+        </div>
+        <div class="date-display">
+          <mat-icon>calendar_today</mat-icon>
+          <span>{{ currentDate | date: 'EEEE, MMMM d' }}</span>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="quick-stats">
+        <div class="stat-box">
+          <div class="stat-icon workout">
+            <mat-icon>fitness_center</mat-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ weeklyWorkouts }}</span>
+            <span class="stat-label">Workouts This Week</span>
+          </div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-icon nutrition">
+            <mat-icon>restaurant</mat-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ todayCalories }}</span>
+            <span class="stat-label">Calories Today</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Action Cards -->
+      <div class="action-grid">
+        <div class="action-card workout-card">
+          <div class="card-header">
+            <div class="card-icon">
+              <mat-icon>fitness_center</mat-icon>
+            </div>
+            <h2>Today's Workout</h2>
+          </div>
+          <div class="card-body">
+            <p>Track your exercises, log your sets, and stay on top of your fitness goals.</p>
+            <div class="card-features">
+              <div class="feature">
+                <mat-icon>check</mat-icon>
+                <span>Quick workout logging</span>
+              </div>
+              <div class="feature">
+                <mat-icon>check</mat-icon>
+                <span>Save workout templates</span>
+              </div>
+              <div class="feature">
+                <mat-icon>check</mat-icon>
+                <span>Track progress over time</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-workout" routerLink="/workouts">
+              <mat-icon>add_circle</mat-icon>
+              Log Workout
+            </button>
+          </div>
+        </div>
+
+        <div class="action-card diet-card">
+          <div class="card-header">
+            <div class="card-icon">
+              <mat-icon>restaurant</mat-icon>
+            </div>
+            <h2>Today's Nutrition</h2>
+          </div>
+          <div class="card-body">
+            <p>Log your meals, track macros, and monitor your daily calorie intake.</p>
+            <div class="card-features">
+              <div class="feature">
+                <mat-icon>check</mat-icon>
+                <span>Track calories & macros</span>
+              </div>
+              <div class="feature">
+                <mat-icon>check</mat-icon>
+                <span>Meal planning tools</span>
+              </div>
+              <div class="feature">
+                <mat-icon>check</mat-icon>
+                <span>Nutrition insights</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-diet" routerLink="/macro">
+              <mat-icon>add_circle</mat-icon>
+              Log Meal
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Secondary Cards -->
+      <div class="secondary-grid">
+        <div class="secondary-card">
+          <div class="secondary-icon">
+            <mat-icon>people</mat-icon>
+          </div>
+          <div class="secondary-content">
+            <h3>Connect with Friends</h3>
+            <p>Share your progress and stay motivated together</p>
+            <a routerLink="/search" class="text-link">
+              Find Friends
+              <mat-icon>arrow_forward</mat-icon>
+            </a>
+          </div>
+        </div>
+
+        <div class="secondary-card">
+          <div class="secondary-icon">
+            <mat-icon>insights</mat-icon>
+          </div>
+          <div class="secondary-content">
+            <h3>Track Your Progress</h3>
+            <p>View detailed analytics and insights</p>
+            <a [routerLink]="['/profile', authService.currentUserSig()?.username]" class="text-link">
+              View Profile
+              <mat-icon>arrow_forward</mat-icon>
+            </a>
+          </div>
+        </div>
+
+        <div class="secondary-card">
+          <div class="secondary-icon">
+            <mat-icon>chat</mat-icon>
+          </div>
+          <div class="secondary-content">
+            <h3>Stay Connected</h3>
+            <p>Chat with your fitness community</p>
+            <a routerLink="/chat" class="text-link">
+              Open Chat
+              <mat-icon>arrow_forward</mat-icon>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Motivational Quote -->
+      <div class="motivation-card">
+        <div class="quote-icon">
+          <mat-icon>format_quote</mat-icon>
+        </div>
+        <blockquote class="quote">
+          {{ dailyQuote }}
+        </blockquote>
+      </div>
+    </div>
+  </div>
+</div>

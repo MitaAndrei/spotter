@@ -1,0 +1,30 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vs/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.DotSettings.user
+*.user
+*.suo
+
+# .NET build output
+[Bb]in/
+[Oo]bj/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+appsettings.*.local.json
+
+# Angular / Node (see also client/.gitignore)
+node_modules/
+.angular/
+dist/

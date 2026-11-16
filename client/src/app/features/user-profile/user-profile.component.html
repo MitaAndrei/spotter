@@ -1,0 +1,188 @@
+<div class="profile-wrapper">
+  <div class="profile-container">
+    <!-- Header Section with Cover -->
+    <div class="profile-header">
+      <div class="cover-image"></div>
+      <div class="profile-main">
+        <div class="avatar-section">
+          <div class="avatar"
+               [class.hoverable]="isCurrentUser"
+               (mouseenter)="showUploadOverlay = isCurrentUser"
+               (mouseleave)="showUploadOverlay = false">
+            <img [src]="profileImageUrl || 'assets/default-avatar.svg'" alt="Profile">
+
+            <input
+              type="file"
+              id="profile-image-upload"
+              accept="image/*"
+              (change)="onProfileImageSelected($event)"
+              style="display: none;">
+
+            <div class="upload-overlay" *ngIf="showUploadOverlay && isCurrentUser">
+              <label for="profile-image-upload" class="upload-label">
+                <mat-icon>photo_camera</mat-icon>
+                <span>Change Photo</span>
+              </label>
+            </div>
+
+            <!-- Loading Overlay -->
+            <div class="loading-overlay" *ngIf="uploadingImage">
+              <mat-spinner diameter="40"></mat-spinner>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-info">
+          <div class="name-section">
+            <h1 class="username">{{ User.username }}</h1>
+            <span class="badge-current" *ngIf="isCurrentUser">You</span>
+          </div>
+
+          <!-- Friendship Actions -->
+          <div class="action-section">
+            <!-- No Friendship -->
+            <button
+              *ngIf="!isCurrentUser && friendshipStatus === FriendshipStatus.None"
+              class="btn btn-primary"
+              (click)="sendFriendRequest()"
+            >
+              <mat-icon>person_add</mat-icon>
+              <span>Add Friend</span>
+            </button>
+
+            <!-- Pending Sent -->
+            <div class="status-card pending" *ngIf="friendshipStatus === FriendshipStatus.PendingSent">
+              <mat-icon>schedule</mat-icon>
+              <div class="status-text">
+                <span class="status-title">Request Sent</span>
+                <span class="status-desc">Waiting for {{ User.username }} to respond</span>
+              </div>
+            </div>
+
+            <!-- Pending Received -->
+            <div class="status-card received" *ngIf="friendshipStatus === FriendshipStatus.PendingReceived">
+              <mat-icon>notifications_active</mat-icon>
+              <div class="status-text">
+                <span class="status-title">Friend Request</span>
+                <span class="status-desc">{{ User.username }} wants to connect!</span>
+              </div>
+              <div class="action-buttons">
+                <button class="btn btn-success" (click)="acceptFriendRequest()">
+                  <mat-icon>check</mat-icon>
+                  Accept
+                </button>
+                <button class="btn btn-danger" (click)="rejectFriendRequest()">
+                  <mat-icon>close</mat-icon>
+                  Decline
+                </button>
+              </div>
+            </div>
+
+            <!-- Friends -->
+            <div class="friends-section" *ngIf="friendshipStatus === FriendshipStatus.Friends">
+              <div class="friends-badge">
+                <mat-icon>check_circle</mat-icon>
+                <span>Friends</span>
+              </div>
+              <div class="friends-actions">
+                <a [routerLink]="['/workouts', User.username]" class="btn btn-secondary">
+                  <mat-icon>fitness_center</mat-icon>
+                  View Workouts
+                </a>
+                <button class="btn btn-danger-outline" (click)="unfriend()">
+                  <mat-icon>person_remove</mat-icon>
+                  Unfriend
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity-section private-activity" *ngIf="activityHidden">
+      <mat-icon>lock</mat-icon>
+      <span>Only {{ User.username }}'s friends can see their workouts.</span>
+    </div>
+
+    <ng-container *ngIf="!activityHidden">
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <mat-icon>emoji_events</mat-icon>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">Total Workouts</span>
+          <span class="stat-value">{{ workouts?.length ?? 0 }}</span>
+          <span class="stat-sublabel">Last 12 months</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon highlight">
+          <mat-icon>trending_up</mat-icon>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">Most Active Month</span>
+          <span class="stat-value">{{ maxWorkoutsAMonth() }}</span>
+          <span class="stat-sublabel">workouts</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon current">
+          <mat-icon>calendar_today</mat-icon>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">This Month</span>
+          <span class="stat-value">{{ workoutsPerMonth() }}</span>
+          <span class="stat-sublabel">workouts</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon streak">
+          <mat-icon>local_fire_department</mat-icon>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">Current Streak</span>
+          <span class="stat-value">{{ getCurrentStreak() }}</span>
+          <span class="stat-sublabel">days</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity Graph Section -->
+    <div class="activity-section">
+      <div class="section-header">
+        <h2>Activity Over Time</h2>
+        <span class="workout-count">{{ workouts?.length ?? 0 }} workouts in the last year</span>
+      </div>
+      <div class="activity-graph-wrapper">
+        <app-activity-graph
+          *ngIf="workouts !== null"
+          [contributions]="workouts"
+          [startDate]="activityStartDate"
+        />
+      </div>
+    </div>
+
+    <!-- Monthly Breakdown -->
+    <div class="monthly-section" *ngIf="workouts && workouts.length > 0">
+      <div class="section-header">
+        <h2>Monthly Breakdown</h2>
+      </div>
+      <div class="months-grid">
+        <div class="month-card" *ngFor="let month of getMonthlyData()">
+          <div class="month-name">{{ month.name }}</div>
+          <div class="month-bar">
+            <div class="bar-fill" [style.width.%]="month.percentage"></div>
+          </div>
+          <div class="month-count">{{ month.count }} workouts</div>
+        </div>
+      </div>
+    </div>
+    </ng-container>
+  </div>
+</div>

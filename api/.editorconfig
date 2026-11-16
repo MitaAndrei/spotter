@@ -1,0 +1,11 @@
+root = true
+
+[*.cs]
+indent_style = space
+indent_size = 4
+csharp_style_namespace_declarations = file_scoped:warning
+
+# EF Core generates the migrations; their lowercase class names are fine.
+[**/Migrations/*.cs]
+generated_code = true
+dotnet_diagnostic.CS8981.severity = none

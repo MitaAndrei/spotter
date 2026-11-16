@@ -1,0 +1,68 @@
+<div class="search-page">
+  <div class="search-container">
+    <!-- Search Header -->
+    <div class="search-header">
+      <h1>Find People</h1>
+      <p>Connect with friends and fitness enthusiasts</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar-wrapper">
+      <div class="search-input-container">
+        <mat-icon class="search-icon">search</mat-icon>
+        <input
+          [formControl]="searchControl"
+          class="search-input"
+          placeholder="Search for people..."
+          (keyup.enter)="search()"
+        />
+        @if(searchControl.value){
+          <button class="clear-btn" (click)="searchControl.setValue('')">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </div>
+      <button class="search-btn" (click)="search()">
+        Search
+      </button>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results-section">
+      @if(query && users.length > 0){
+        <div class="results-header">
+          <span class="results-count">{{ users.length }} {{ users.length === 1 ? 'result' : 'results' }} found</span>
+        </div>
+      }
+
+      <div class="user-grid">
+        @for(user of users; track user.username){
+          <div class="user-card" [routerLink]="['/profile', user.username]">
+            <div class="user-avatar">
+              <img [src]=" user.profileImageUrl || 'assets/default-avatar.svg'" alt="{{ user.username }}">
+            </div>
+            <div class="user-info">
+              <h3 class="username">{{ user.username }}</h3>
+              <span class="view-profile">View Profile</span>
+            </div>
+            <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+          </div>
+        } @empty {
+          @if(query){
+            <div class="empty-state">
+              <mat-icon class="empty-icon">search_off</mat-icon>
+              <h3>No users found</h3>
+              <p>Try searching with a different keyword</p>
+            </div>
+          } @else {
+            <div class="empty-state">
+              <mat-icon class="empty-icon">people</mat-icon>
+              <h3>Start searching</h3>
+              <p>Enter a name to find people</p>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  </div>
+</div>

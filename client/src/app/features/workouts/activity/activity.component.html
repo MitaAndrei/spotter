@@ -1,0 +1,38 @@
+<div class="activity-card"
+     cdkDrag
+     [cdkDragData]="workout()"
+     [cdkDragDisabled]="!editable()"
+     [class.dragging]="isDragging"
+     (cdkDragStarted)="onDragStarted()"
+     (cdkDragEnded)="onDragEnded()">
+
+  <div class="activity-header">
+    <div class="muscle-tags">
+      <span *ngFor="let label of workout().labels"
+            class="muscle-tag"
+            [style.background]="label.color">
+        {{ label.muscle }}
+      </span>
+    </div>
+
+    <div class="activity-actions" *ngIf="editable()">
+      <button class="action-btn edit" (click)="openEditDialog()" title="Edit">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button class="action-btn delete" (click)="openDeleteDialog()" title="Delete">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="activity-body">
+    <p class="activity-description">{{ workout().description }}</p>
+  </div>
+
+  <div class="activity-footer">
+    <div class="duration-badge">
+      <mat-icon>schedule</mat-icon>
+      <span>{{ workout().duration }} min</span>
+    </div>
+  </div>
+</div>

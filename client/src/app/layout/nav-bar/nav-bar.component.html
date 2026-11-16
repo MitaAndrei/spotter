@@ -1,0 +1,43 @@
+<nav class="nav-bar">
+  <div class="nav-container">
+
+    <div class="nav-center">
+      <app-search *ngIf="authService.currentUserSig()"></app-search>
+    </div>
+
+    <div class="nav-right">
+      <div class="nav-links" *ngIf="authService.currentUserSig()">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="nav-link">
+          <mat-icon class="nav-icon">home</mat-icon>
+          <span>Home</span>
+        </a>
+        <a routerLink="/chat/" routerLinkActive="active" class="nav-link">
+          <mat-icon class="nav-icon">chat</mat-icon>
+          <span>Chat</span>
+        </a>
+        <a [routerLink]="['/profile', authService.currentUserSig()?.username]" routerLinkActive="active" class="nav-link">
+          <mat-icon class="nav-icon">person</mat-icon>
+          <span>Profile</span>
+        </a>
+        <a [routerLink]="['/workouts', authService.currentUserSig()?.username]" routerLinkActive="active" class="nav-link">
+          <mat-icon class="nav-icon">fitness_center</mat-icon>
+          <span>Workouts</span>
+        </a>
+        <a routerLink="/macro" routerLinkActive="active" class="nav-link">
+          <mat-icon class="nav-icon">restaurant</mat-icon>
+          <span>Macros</span>
+        </a>
+      </div>
+
+      <div class="auth-section">
+        <button *ngIf="authService.currentUserSig()" class="sign-out-btn" (click)="signOut()">
+          <mat-icon>logout</mat-icon>
+          <span>Sign out</span>
+        </button>
+        <a *ngIf="!authService.currentUserSig()" routerLink="/auth-form" class="sign-in-btn">
+          Sign in
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>

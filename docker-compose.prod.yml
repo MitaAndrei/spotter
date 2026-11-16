@@ -1,0 +1,38 @@
+# For the server: Caddy in front with HTTPS, and images from ghcr.io instead of building them.
+# docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# See docs/deploy-vps.md.
+services:
+  api:
+    image: ${IMAGE_PREFIX:?set IMAGE_PREFIX}/api:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+
+  client:
+    image: ${IMAGE_PREFIX:?set IMAGE_PREFIX}/client:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+
+  postgres:
+    restart: unless-stopped
+
+  redis:
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # Keeps the HTTPS certificates across restarts.
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - client
+
+volumes:
+  caddy-data:
+  caddy-config:

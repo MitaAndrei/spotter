@@ -1,0 +1,50 @@
+<div class="search-wrapper">
+  <div class="search-container">
+    <mat-icon class="search-icon-left">search</mat-icon>
+    <input
+      [formControl]="searchControl"
+      (blur)="onBlur()"
+      (focus)="inputIsFocused = true"
+      placeholder="Search for people"
+      class="search-input"
+      (keyup.enter)="goToSearchPage()"
+    />
+    <button
+      *ngIf="searchControl.value"
+      class="clear-btn"
+      (click)="clearSearch()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="search-results" *ngIf="searchControl.value && inputIsFocused">
+    <div class="results-header" *ngIf="users.length > 0">
+      <span class="results-count">{{ users.length }} {{ users.length === 1 ? 'user' : 'users' }} found</span>
+    </div>
+
+    <div class="user-list">
+      <a
+        *ngFor="let user of users; trackBy: trackByUsername"
+        class="user-item"
+        [routerLink]="['/profile', user.username]"
+        (click)="selectUser()"
+      >
+        <div class="user-avatar">
+          <mat-icon>person</mat-icon>
+        </div>
+        <div class="user-details">
+          <span class="user-username">{{ user.username }}</span>
+          <span class="user-label" *ngIf="user.username === authService.currentUserSig()?.username">You</span>
+        </div>
+        <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+      </a>
+
+      <div class="no-results" *ngIf="users.length === 0">
+        <mat-icon>search_off</mat-icon>
+        <p>No users found</p>
+        <span>Try a different search term</span>
+      </div>
+    </div>
+  </div>
+</div>
