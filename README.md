@@ -94,7 +94,7 @@ cd api/gymappAPI
 
 dotnet user-secrets set "ConnectionStrings:AppDbConnectionString" "Host=localhost;Database=gymapp;Username=gymapp;Password=changeme"
 dotnet user-secrets set "ConnectionStrings:Redis" "localhost:6379,abortConnect=false"
-dotnet user-secrets set "JwtSettings:Key" "$(openssl rand -base64 64)"
+dotnet user-secrets set "JwtSettings:Key" "$(openssl rand -base64 64 | tr -d '\n')"
 
 # Optional: profile pictures
 dotnet user-secrets set "AWS:BucketName" "<bucket>"
@@ -102,14 +102,7 @@ dotnet user-secrets set "AWS:AccessKey"  "<access key>"
 dotnet user-secrets set "AWS:SecretKey"  "<secret key>"
 ```
 
-In production, use environment variables instead. A double underscore stands for a nested key:
-
-```bash
-export ConnectionStrings__AppDbConnectionString="Host=...;Database=...;Username=...;Password=..."
-export ConnectionStrings__Redis="redis:6379,abortConnect=false"
-export JwtSettings__Key="..."
-export AWS__BucketName="..." AWS__AccessKey="..." AWS__SecretKey="..."
-```
+Outside development, the same settings come from environment variables, with a double underscore for each level (`ConnectionStrings__AppDbConnectionString`, `JwtSettings__Key`, `AWS__BucketName`, ...), as in `docker-compose.yml`.
 
 If `ConnectionStrings:Redis` is empty, the API falls back to an in-memory cache, so Redis is optional for local development. If the database connection string or the JWT key is missing, the API stops at startup and prints an error saying which one.
 
@@ -136,7 +129,7 @@ Open http://localhost:4200.
 
 ## Deployment
 
-The live demo runs these same containers on one Linux server, with Caddy in front for HTTPS. After a one-time setup, every push to `main` that passes CI is built into images on GitHub Actions and deployed to the server. See [docs/deploy-vps.md](docs/deploy-vps.md).
+The live demo runs these same containers on one Linux server, with Caddy in front for HTTPS. Every push to `main` that passes CI is built into images on GitHub Actions and deployed to the server. See [docs/deploy-vps.md](docs/deploy-vps.md) for the setup.
 
 ## Tests
 
